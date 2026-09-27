@@ -24,4 +24,16 @@ public class MemberRequestDto {
             @Schema(description = "닉네임 (20자 이하)", example = "tester")
             String nickname
     ) {}
+
+    // 일반 로그인
+    public record LoginDTO(
+            @NotBlank(message = "이메일은 필수입니다.")
+            @Email(message = "올바른 이메일 형식이 아닙니다.")
+            @Schema(description = "이메일", example = "test@example.com")
+            String email,
+
+            @NotBlank(message = "비밀번호는 필수입니다.")
+            @Schema(description = "비밀번호", example = "password123")
+            String password
+    ) {}
 }

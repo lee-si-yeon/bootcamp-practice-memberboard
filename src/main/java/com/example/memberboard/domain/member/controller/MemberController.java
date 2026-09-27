@@ -21,7 +21,7 @@ public class MemberController {
     private final MemberCommandService memberCommandService;
 
     @Operation(summary = "일반 회원가입")
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto.SignUpResultDTO> signup(
             @Valid @RequestBody MemberRequestDto.SignUpDTO request
     ) {
@@ -29,5 +29,13 @@ public class MemberController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @Operation(summary = "일반 로그인")
+    @PostMapping("/login")
+    public ResponseEntity<MemberResponseDto.LoginResultDTO> login(
+            @Valid @RequestBody MemberRequestDto.LoginDTO request
+    ) {
+        return ResponseEntity.ok(memberCommandService.login(request));
     }
 }

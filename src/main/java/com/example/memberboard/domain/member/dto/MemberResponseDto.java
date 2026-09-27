@@ -14,4 +14,11 @@ public class MemberResponseDto {
             String nickname,
             LocalDateTime createdAt
     ) {}
+
+    // 일반 로그인 결과
+    @Builder
+    public record LoginResultDTO(
+            Long memberId,
+            String accessToken
+    ) {}
 }
