@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: "jdbc:h2:file:/data/memberboard;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE"
+      DB_USERNAME: sa
+      DB_PASSWORD: ""
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+      SPRING_JPA_DATABASE: H2
+      JWT_SECRET_KEY: "memberboard-local-secret-key-at-least-32-characters"
+      JWT_ACCESS_TOKEN_EXPIRATION: 3600000
+    volumes:
+      - app-data:/data
+
+volumes:
+  app-data:
