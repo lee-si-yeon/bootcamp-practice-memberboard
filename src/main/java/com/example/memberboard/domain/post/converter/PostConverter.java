@@ -4,6 +4,7 @@ import com.example.memberboard.domain.member.entity.Member;
 import com.example.memberboard.domain.post.dto.PostRequestDto;
 import com.example.memberboard.domain.post.dto.PostResponseDto;
 import com.example.memberboard.domain.post.entity.Post;
+import org.springframework.data.domain.Page;
 
 public class PostConverter {
 
@@ -26,6 +27,30 @@ public class PostConverter {
                 .authorNickname(post.getAuthor().getNickname())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .build();
+    }
+
+    // entity -> 게시글 목록 DTO
+    public static PostResponseDto.ListDTO toListDTO(Post post) {
+        return PostResponseDto.ListDTO.builder()
+                .postId(post.getId())
+                .title(post.getTitle())
+                .authorNickname(post.getAuthor().getNickname())
+                // ponytail: 댓글 도메인 구현 후 집계 쿼리 결과로 교체
+                .commentCount(0)
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .build();
+    }
+
+    // page -> 게시글 목록 조회 결과 DTO
+    public static PostResponseDto.ListResultDTO toListResultDTO(Page<Post> posts) {
+        return PostResponseDto.ListResultDTO.builder()
+                .posts(posts.map(PostConverter::toListDTO).getContent())
+                .page(posts.getNumber())
+                .size(posts.getSize())
+                .totalElements(posts.getTotalElements())
+                .totalPages(posts.getTotalPages())
                 .build();
     }
 }

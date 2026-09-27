@@ -40,4 +40,9 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id", nullable = false)
     private Member author;
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

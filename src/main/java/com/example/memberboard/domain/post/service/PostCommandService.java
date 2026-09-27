@@ -29,4 +29,27 @@ public class PostCommandService {
 
         return PostConverter.toDetailDTO(post);
     }
+
+    // 게시글 수정
+    public PostResponseDto.DetailDTO update(Long memberId, Long postId, PostRequestDto.UpdatePostDTO request) {
+        Post post = getOwnedPost(memberId, postId);
+        post.update(request.title(), request.content());
+
+        return PostConverter.toDetailDTO(post);
+    }
+
+    // 게시글 삭제
+    public void delete(Long memberId, Long postId) {
+        postRepository.delete(getOwnedPost(memberId, postId));
+    }
+
+    private Post getOwnedPost(Long memberId, Long postId) {
+        Post post = postRepository.findWithAuthorById(postId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
+
+        if (!post.getAuthor().getId().equals(memberId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "게시글 작성자만 수정하거나 삭제할 수 있습니다.");
+        }
+        return post;
+    }
 }
