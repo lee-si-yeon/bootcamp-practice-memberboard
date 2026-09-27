@@ -225,7 +225,7 @@ curl -i -X POST http://localhost:8080/api/v1/members/signup \
 
 ```text
 HTTP/1.1 201
-{"memberId":1,"email":"user@example.com","nickname":"사용자","createdAt":"2026-09-28T01:00:00"}
+{"memberId":1,"email":"user@example.com","nickname":"사용자","createdAt":"2026-09-27T16:02:14.486401544"}
 ```
 
 ```bash
@@ -236,7 +236,7 @@ TOKEN=$(curl -s -X POST http://localhost:8080/api/v1/members/login \
 
 ```text
 HTTP/1.1 200
-{"memberId":1,"accessToken":"eyJ..."}
+{"memberId":1,"accessToken":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzkwNTI0OTM0LCJleHAiOjE3OTA1Mjg1MzR9.dmmUKix8VgdNfosznLOFPYAXeX-6GdIXL5wlAJY8AEwzA9VZzBMYo_9D2H0M53sZ"}
 ```
 
 ```bash
@@ -248,7 +248,7 @@ curl -i -X POST http://localhost:8080/api/v1/posts \
 
 ```text
 HTTP/1.1 201
-{"postId":1,"title":"첫 게시글","content":"게시글 본문","authorId":1,"authorNickname":"사용자",...}
+{"postId":1,"title":"첫 게시글","content":"게시글 본문","authorId":1,"authorNickname":"사용자","createdAt":"2026-09-27T16:02:14.776024378","updatedAt":"2026-09-27T16:02:14.776024378"}
 ```
 
 ```bash
@@ -260,7 +260,7 @@ curl -i -X POST http://localhost:8080/api/v1/posts/1/comments \
 
 ```text
 HTTP/1.1 201
-{"commentId":1,"postId":1,"content":"첫 댓글","authorId":1,"authorNickname":"사용자",...}
+{"commentId":1,"postId":1,"content":"첫 댓글","authorId":1,"authorNickname":"사용자","createdAt":"2026-09-27T16:02:14.804742003","updatedAt":"2026-09-27T16:02:14.804742003"}
 ```
 
 ```bash
@@ -269,7 +269,7 @@ curl -i 'http://localhost:8080/api/v1/posts?page=0&size=10'
 
 ```text
 HTTP/1.1 200
-{"posts":[{"postId":1,"title":"첫 게시글","authorNickname":"사용자","commentCount":1,...}],"page":0,"size":10,"totalElements":1,"totalPages":1}
+{"posts":[{"postId":1,"title":"첫 게시글","authorNickname":"사용자","commentCount":1,"createdAt":"2026-09-27T16:02:14.776024","updatedAt":"2026-09-27T16:02:14.776024"}],"page":0,"size":10,"totalElements":1,"totalPages":1}
 ```
 
 인증 없이 글을 작성하면 `401`입니다.
@@ -286,6 +286,16 @@ HTTP/1.1 401
 ```
 
 다른 회원의 토큰으로 글을 수정하면 `403`입니다.
+
+```bash
+curl -s -X POST http://localhost:8080/api/v1/members/signup \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"other@example.com","password":"password123","nickname":"다른사용자"}' > /dev/null
+
+OTHER_TOKEN=$(curl -s -X POST http://localhost:8080/api/v1/members/login \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"other@example.com","password":"password123"}' | jq -r '.accessToken')
+```
 
 ```bash
 curl -i -X PUT http://localhost:8080/api/v1/posts/1 \
