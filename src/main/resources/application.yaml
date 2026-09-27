@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: memberboard
+
+  profiles:
+    active: dev
